@@ -1,0 +1,49 @@
+name: Wrong verdict
+description: A legitimate site was flagged as phishing, or a phishing link was marked safe.
+title: "[Wrong verdict]: "
+labels: ["wrong-verdict"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the model! **Please defang the URL** so nobody clicks it
+        by accident: write `hxxp://evil[.]example/login` instead of `http://evil.example/login`.
+        Replace any personal data in the URL (emails, tokens) with `REDACTED`.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What went wrong?
+      options:
+        - False positive (a legitimate site was flagged)
+        - False negative (a phishing link was marked safe)
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL (defanged)
+      placeholder: hxxps://login[.]example-bank[.]com/secure/verify
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: PhishGuard output
+      description: Paste the output of `python -m phishguard.predict --json "<url>"`.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How do you know the correct answer?
+      description: >
+        For example: "this is my university's official login page", or "listed on PhishTank
+        as #1234567". A link to a public report helps a lot.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else?
+      description: Ideas about which feature or pattern caused the mistake are welcome.

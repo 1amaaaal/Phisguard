@@ -1,0 +1,39 @@
+name: Feature request
+description: Suggest a new feature or improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation, e.g. "phishing on newly registered domains is often missed".
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How could PhishGuard handle it? New features, data or model changes are all fine.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Project rules
+      description: See CONTRIBUTING.md. Ideas that break a rule are still welcome; just say so below.
+      options:
+        - label: This works offline, without visiting the URL being classified
+        - label: This can be evaluated on unseen domains (domain-grouped split)
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you like to work on this?
+      options:
+        - Yes, I'd like to open a pull request
+        - Maybe, with some guidance
+        - No, just suggesting

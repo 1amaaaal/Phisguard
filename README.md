@@ -185,3 +185,16 @@ scripts/        Data download script and a red-team URL list
 3. Build a browser extension that calls the API and colours the toolbar icon.
 4. Run an adversarial evaluation: generate evasive variants of caught URLs and measure recall.
 5. Calibrate the probabilities (`CalibratedClassifierCV`) and plot a reliability diagram.
+
+## Contributing
+
+Contributions are welcome, especially reports of URLs that get the wrong verdict. Read
+[CONTRIBUTING.md](CONTRIBUTING.md) for setup steps and project rules, and follow the
+[Code of Conduct](CODE_OF_CONDUCT.md). To report a security problem, see
+[SECURITY.md](SECURITY.md).
+
+## License
+
+The code is released under the [MIT License](LICENSE). The training datasets are not
+included in this repository. They are downloaded from their original sources by
+`scripts/download_data.sh` and remain under their own terms.
