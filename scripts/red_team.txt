@@ -1,0 +1,32 @@
+# Hand-written reality check: run with  python -m phishguard.predict --file scripts/red_team.txt
+# Lines starting with '#' are ignored.
+
+# --- Legitimate: popular sites (the reputation layer should mark these safe)
+https://www.paypal.com/signin
+https://accounts.google.com/ServiceLogin
+https://github.com/login
+https://www.bankofamerica.com/
+https://www.amazon.co.uk/gp/your-account/order-history
+
+# --- Legitimate: should be safe on the ML score alone
+https://en.wikipedia.org/wiki/Phishing
+https://docs.python.org/3/library/urllib.parse.html
+https://blog.example.org/2024/05/hello
+
+# --- Known hard cases (legitimate, but currently flagged; see README "Limitations")
+https://my.smallcreditunion.org/online-banking/login
+https://blog.janesmith.dev/posts/rust-async
+
+# --- Phishing techniques (all should be flagged)
+http://paypal.com.account-verify.xyz/webscr/login.php
+http://paypa1.com/signin
+http://secure-appleid.apple.com.unlock-account.top/
+http://192.168.43.12/chase/login.php?cmd=_update
+http://amaz0n-billing-update.club/account
+https://office365-login.000webhostapp.com/owa/auth.php
+http://www.google.com@evil-site.ru/login
+https://xn--pypal-4ve.com/
+https://bit.ly/3xYzAbC
+https://netflix-payment-confirm.site/billing/update
+https://docs.google.com/forms/d/e/1FAIpQLSf-verify-account/viewform
+http://bakery-delights.com/wp-includes/js/office/login.php

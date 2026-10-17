@@ -1,0 +1,203 @@
+{
+  "trained_at": "2026-10-17 18:29",
+  "n_train": 42563,
+  "n_test": 10838,
+  "n_test_domains": 6897,
+  "threshold": 0.6416,
+  "max_fpr_target": 0.02,
+  "test": {
+    "threshold": 0.6416,
+    "accuracy": 0.9586,
+    "precision": 0.9303,
+    "recall": 0.9201,
+    "f1": 0.9252,
+    "false_positive_rate": 0.0266,
+    "roc_auc": 0.9878,
+    "pr_auc": 0.9771,
+    "recall_at_2pct_fpr": 0.9019,
+    "confusion": {
+      "tn": 7614,
+      "fp": 208,
+      "fn": 241,
+      "tp": 2775
+    }
+  },
+  "recall_by_brand": {
+    "Other": {
+      "n": 2600,
+      "recall": 0.9277
+    },
+    "PayPal": {
+      "n": 116,
+      "recall": 0.8707
+    },
+    "RuneScape": {
+      "n": 38,
+      "recall": 1.0
+    },
+    "Facebook": {
+      "n": 37,
+      "recall": 0.8919
+    },
+    "Microsoft": {
+      "n": 36,
+      "recall": 0.9444
+    },
+    "Steam": {
+      "n": 26,
+      "recall": 0.9231
+    },
+    "eBay, Inc.": {
+      "n": 25,
+      "recall": 0.84
+    },
+    "Orange": {
+      "n": 17,
+      "recall": 0.5882
+    }
+  },
+  "cross_validation": {
+    "accuracy": {
+      "mean": 0.9534,
+      "std": 0.0033
+    },
+    "precision": {
+      "mean": 0.8851,
+      "std": 0.0093
+    },
+    "recall": {
+      "mean": 0.9215,
+      "std": 0.0076
+    },
+    "f1": {
+      "mean": 0.9029,
+      "std": 0.0083
+    },
+    "false_positive_rate": {
+      "mean": 0.0368,
+      "std": 0.0022
+    },
+    "roc_auc": {
+      "mean": 0.9855,
+      "std": 0.0015
+    },
+    "pr_auc": {
+      "mean": 0.9685,
+      "std": 0.0035
+    },
+    "recall_at_2pct_fpr": {
+      "mean": 0.8906,
+      "std": 0.0126
+    }
+  },
+  "ablation": [
+    {
+      "setup": "Naive: raw URLs, random split (leaky)",
+      "threshold": 0.5,
+      "accuracy": 0.9976,
+      "precision": 0.9929,
+      "recall": 0.9968,
+      "f1": 0.9948,
+      "false_positive_rate": 0.0022,
+      "roc_auc": 0.9999,
+      "pr_auc": 0.9997,
+      "recall_at_2pct_fpr": 0.9992,
+      "confusion": {
+        "tn": 8149,
+        "fp": 18,
+        "fn": 8,
+        "tp": 2506
+      }
+    },
+    {
+      "setup": "Raw URLs, domain split (still leaky: scheme)",
+      "threshold": 0.5,
+      "accuracy": 0.979,
+      "precision": 0.9332,
+      "recall": 0.9957,
+      "f1": 0.9634,
+      "false_positive_rate": 0.0275,
+      "roc_auc": 0.9986,
+      "pr_auc": 0.9961,
+      "recall_at_2pct_fpr": 0.9947,
+      "confusion": {
+        "tn": 7607,
+        "fp": 215,
+        "fn": 13,
+        "tp": 3003
+      }
+    },
+    {
+      "setup": "Char n-grams only, normalised, domain split",
+      "threshold": 0.5,
+      "accuracy": 0.9385,
+      "precision": 0.917,
+      "recall": 0.8568,
+      "f1": 0.8858,
+      "false_positive_rate": 0.0299,
+      "roc_auc": 0.9755,
+      "pr_auc": 0.9563,
+      "recall_at_2pct_fpr": 0.8263,
+      "confusion": {
+        "tn": 7588,
+        "fp": 234,
+        "fn": 432,
+        "tp": 2584
+      }
+    },
+    {
+      "setup": "Hand-crafted features only, domain split",
+      "threshold": 0.5,
+      "accuracy": 0.8996,
+      "precision": 0.7948,
+      "recall": 0.8617,
+      "f1": 0.8269,
+      "false_positive_rate": 0.0858,
+      "roc_auc": 0.9541,
+      "pr_auc": 0.9145,
+      "recall_at_2pct_fpr": 0.6814,
+      "confusion": {
+        "tn": 7151,
+        "fp": 671,
+        "fn": 417,
+        "tp": 2599
+      }
+    },
+    {
+      "setup": "Text model (char + word) only, domain split",
+      "threshold": 0.5,
+      "accuracy": 0.933,
+      "precision": 0.9095,
+      "recall": 0.8432,
+      "f1": 0.8751,
+      "false_positive_rate": 0.0323,
+      "roc_auc": 0.9724,
+      "pr_auc": 0.9502,
+      "recall_at_2pct_fpr": 0.811,
+      "confusion": {
+        "tn": 7569,
+        "fp": 253,
+        "fn": 473,
+        "tp": 2543
+      }
+    },
+    {
+      "setup": "PhishGuard stacked model, domain split",
+      "threshold": 0.6416,
+      "accuracy": 0.9586,
+      "precision": 0.9303,
+      "recall": 0.9201,
+      "f1": 0.9252,
+      "false_positive_rate": 0.0266,
+      "roc_auc": 0.9878,
+      "pr_auc": 0.9771,
+      "recall_at_2pct_fpr": 0.9019,
+      "confusion": {
+        "tn": 7614,
+        "fp": 208,
+        "fn": 241,
+        "tp": 2775
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PhishGuard</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1c2230; --muted:#5d6678; --border:#dde1e8;
+          --safe:#1f8a4c; --warn:#b7791f; --bad:#c53030; --accent:#2f5fb3; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#12151b; --card:#1b2029; --text:#e6e9ef; --muted:#9aa3b5; --border:#2c3340;
+            --safe:#48bb78; --warn:#ecc94b; --bad:#fc8181; --accent:#7aa2f7; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif;
+         background:var(--bg); color:var(--text); }
+  main { max-width:760px; margin:0 auto; padding:48px 16px; }
+  h1 { margin:0 0 4px; font-size:28px; }
+  p.sub { margin:0 0 24px; color:var(--muted); }
+  form { display:flex; gap:8px; }
+  input { flex:1; min-width:0; padding:12px 14px; font-size:15px; border:1px solid var(--border);
+          border-radius:8px; background:var(--card); color:var(--text); }
+  button { padding:12px 18px; font-size:15px; border:0; border-radius:8px; cursor:pointer;
+           background:var(--accent); color:#fff; }
+  .card { margin-top:24px; padding:20px; background:var(--card); border:1px solid var(--border);
+          border-radius:12px; display:none; }
+  .verdict { font-size:22px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+  .safe { color:var(--safe); } .suspicious { color:var(--warn); } .phishing { color:var(--bad); }
+  .meter { height:10px; background:var(--border); border-radius:5px; overflow:hidden; margin:12px 0; }
+  .meter > div { height:100%; transition:width .3s; }
+  .url { word-break:break-all; color:var(--muted); font-family:ui-monospace, monospace; font-size:13px; }
+  ul { padding-left:20px; } li { margin:4px 0; }
+  code { background:var(--bg); padding:1px 5px; border-radius:4px; }
+  .scores { color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>PhishGuard</h1>
+  <p class="sub">Paste a link to check whether it looks like phishing. Only the URL text is
+    analysed: the site itself is never visited.</p>
+  <form id="f">
+    <input id="u" placeholder="http://paypal.com.account-verify.xyz/login" autocomplete="off" required>
+    <button>Check</button>
+  </form>
+  <section class="card" id="out">
+    <div class="verdict" id="verdict"></div>
+    <div class="url" id="url"></div>
+    <div class="meter"><div id="bar"></div></div>
+    <div id="prob"></div>
+    <ul id="reasons"></ul>
+    <div id="frags"></div>
+    <p class="scores" id="scores"></p>
+  </section>
+</main>
+<script>
+// All server data is inserted with textContent, never innerHTML: the URL the
+// user typed could itself be an XSS payload.
+const $ = id => document.getElementById(id);
+const colors = { safe: "var(--safe)", suspicious: "var(--warn)", phishing: "var(--bad)" };
+$("f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const res = await fetch("/predict", { method: "POST", headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ url: $("u").value }) });
+  const p = await res.json();
+  if (!res.ok) { alert(p.detail || "Request failed"); return; }
+  $("out").style.display = "block";
+  $("verdict").textContent = p.verdict;
+  $("verdict").className = "verdict " + p.verdict;
+  $("url").textContent = p.url;
+  $("bar").style.width = (p.probability * 100).toFixed(1) + "%";
+  $("bar").style.background = colors[p.verdict];
+  $("prob").textContent = `Phishing probability: ${(p.probability * 100).toFixed(1)}%`;
+  $("reasons").replaceChildren(...p.reasons.map(r => Object.assign(document.createElement("li"), { textContent: r })));
+  $("frags").replaceChildren();
+  if (p.suspicious_fragments.length) {
+    $("frags").append("Suspicious fragments: ");
+    p.suspicious_fragments.forEach(f => $("frags").append(Object.assign(document.createElement("code"), { textContent: f }), " "));
+  }
+  $("scores").textContent = `ML score ${(p.model_scores.final * 100).toFixed(1)}% · ` +
+                            `Text model ${(p.model_scores.text_model * 100).toFixed(1)}%` +
+                            (p.trusted_domain ? " · Trusted popular domain" : "");
+});
+</script>
+</body>
+</html>
