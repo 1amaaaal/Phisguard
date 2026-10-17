@@ -1,10 +1,32 @@
-"""Hugging Face Spaces demo for PhishGuard (Gradio)."""
+"""Hugging Face Spaces demo for PhishGuard (Gradio).
+
+Works with either layout:
+  * nested: phishguard/*.py and models/phishguard.joblib
+  * flat:   every file next to app.py (what the browser upload produces)
+"""
+
+import importlib.util
+import sys
+from pathlib import Path
 
 import gradio as gr
 
-from phishguard.model import PhishGuard
+ROOT = Path(__file__).resolve().parent
 
-model = PhishGuard.load()
+if not (ROOT / "phishguard" / "__init__.py").exists():
+    # Flat layout: register this folder as the `phishguard` package so the
+    # package's relative imports, and the pickled model, resolve normally.
+    spec = importlib.util.spec_from_file_location(
+        "phishguard", ROOT / "__init__.py", submodule_search_locations=[str(ROOT)])
+    package = importlib.util.module_from_spec(spec)
+    sys.modules["phishguard"] = package
+    spec.loader.exec_module(package)
+
+from phishguard.model import PhishGuard  # noqa: E402
+
+MODEL_FILE = next(p for p in (ROOT / "models" / "phishguard.joblib", ROOT / "phishguard.joblib")
+                  if p.exists())
+model = PhishGuard.load(MODEL_FILE)
 
 ICONS = {"safe": "🟢", "suspicious": "🟠", "phishing": "🔴"}
 EXAMPLES = [

@@ -3,10 +3,11 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 OUT=build/space
-rm -rf "$OUT" && mkdir -p "$OUT/models"
+# Flat layout (no folders), because the Hugging Face browser upload flattens
+# folders anyway. app.py knows how to load the package from this layout.
+rm -rf "$OUT" && mkdir -p "$OUT"
 cp huggingface/app.py huggingface/requirements.txt huggingface/README.md "$OUT/"
-mkdir -p "$OUT/phishguard"
-cp phishguard/__init__.py phishguard/model.py phishguard/features.py phishguard/urltools.py "$OUT/phishguard/"
-cp models/phishguard.joblib "$OUT/models/"
+cp phishguard/__init__.py phishguard/model.py phishguard/features.py phishguard/urltools.py "$OUT/"
+cp models/phishguard.joblib "$OUT/"
 echo "Space files ready in $OUT/:"
 find "$OUT" -type f | sort
