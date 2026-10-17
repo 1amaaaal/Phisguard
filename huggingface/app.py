@@ -24,6 +24,15 @@ if not (ROOT / "phishguard" / "__init__.py").exists():
 
 from phishguard.model import PhishGuard  # noqa: E402
 
+try:
+    # ZeroGPU Spaces refuse to start without a @spaces.GPU function. The model
+    # runs on CPU either way; on other hardware this decorator does nothing.
+    import spaces
+    gpu = spaces.GPU(duration=15)
+except ImportError:
+    def gpu(fn):
+        return fn
+
 MODEL_FILE = next(p for p in (ROOT / "models" / "phishguard.joblib", ROOT / "phishguard.joblib")
                   if p.exists())
 model = PhishGuard.load(MODEL_FILE)
@@ -45,6 +54,7 @@ def code(text: str) -> str:
     return "`" + text.replace("`", "'") + "`"
 
 
+@gpu
 def check(url: str) -> tuple[str, dict]:
     url = (url or "").strip()
     if not url:
