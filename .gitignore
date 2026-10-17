@@ -4,3 +4,4 @@ __pycache__/
 .venv/
 data/raw/*
 !data/raw/.gitkeep
+build/

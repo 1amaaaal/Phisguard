@@ -1,0 +1,6 @@
+# Pinned to the versions the model was trained with: a pickled scikit-learn
+# model may not load, or may behave differently, under another version.
+scikit-learn==1.9.1
+scipy==1.18.1
+numpy==2.5.3
+joblib==1.6.0
